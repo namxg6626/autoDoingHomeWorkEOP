@@ -2,17 +2,15 @@ let checkCells = document.querySelectorAll('.ques > div > p > div > ins');
 let submitButton = document.querySelector('#dSubmit');
 let viewAnswerButton = document.querySelector('#dViewAnswer');
 
-console.log(checkCells);
-// check full boxes in order to view answer
 for (let i = 0; i < checkCells.length; i++) {
-    checkCells[i].click()
+    checkCells[i].click();
 }
 submitButton.click();
 
 // view answer
 setTimeout(function () {
     viewAnswerButton.click();
-}, 2000);
+}, 2000); // min: 2000
 
 // refresh checkCells, remember correct answer to check
 let answerArray = []
@@ -27,4 +25,4 @@ setTimeout(function () {
         checkCells[i].click();
     }
     submitButton.click();
-}, 3300)
+}, 3300); // min: 3300
