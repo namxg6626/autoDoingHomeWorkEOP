@@ -18,7 +18,7 @@ setInterval(function () {
     else setTimeout(function () {
         submitButton.click();
     }, 1000) // min: 1000
-}, 2000); // min: 2000
+}, 30000); // min: 2000 // measurement: ms // set iteration time here
 
 
 // define function
@@ -27,8 +27,8 @@ function autoTyping(answerBoxes) {
         answerBoxes[i].value = 'draft';
     }
     submitButton.click();
-    viewAnswerButton.click();
-
+    setTimeout(() => { viewAnswerButton.click(); }, 500)
+    
     setTimeout(function () {
         let answerArray = [];
         answerBoxes = document.querySelectorAll('.dinline');
@@ -40,7 +40,9 @@ function autoTyping(answerBoxes) {
 
         for (let i = 0; i < answerBoxes.length; i++)
             answerBoxes[i].value = answerArray[i];
-        submitButton.click();
+        setTimeout(() => {
+            submitButton.click();
+        }, 400);
     }, 1000) // min: 1000
 }
 
@@ -49,8 +51,8 @@ function autoCheckBox(checkCells) {
         checkCells[i].click();
     }
     submitButton.click();
-    viewAnswerButton.click();
-
+    setTimeout(() => { viewAnswerButton.click(); }, 500)
+    
     // refresh checkCells, remember correct answer to check
     setTimeout(function () {
         let answerArray = []
@@ -63,7 +65,9 @@ function autoCheckBox(checkCells) {
         for (let i of answerArray) {
             checkCells[i].click();
         }
-        submitButton.click();
+        setTimeout(() => {
+            submitButton.click();
+        }, 400);
     }, 1000); // min: 1000
 }
 
@@ -71,5 +75,7 @@ function autoVocabularySpeaking(playButton) {
     for (let i = 0; i < playButton.length; i++) {
         playButton[i].click();
     }
-    submitButton.click();
+    setTimeout(() => {
+        submitButton.click();
+    }, 400);
 }
