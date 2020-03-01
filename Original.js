@@ -1,81 +1,80 @@
-// main
-setInterval(function () {
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+begin();
+
+async function begin() {
+    await timeout(1000); // period time: ms
     submitButton = document.querySelector('#dSubmit');
     viewAnswerButton = document.querySelector('#dViewAnswer');
     let answerBoxes = document.querySelectorAll('.dinline');
     let checkCells = document.querySelectorAll('.ques > div > p > div > ins');
     let playButton = document.querySelectorAll('#mbody > .default > .row .daudio');
 
-    if (answerBoxes.length != 0)
-        autoTyping(answerBoxes);
+    await Promise.all([
+        autoTyping(answerBoxes),
+        autoCheckBox(checkCells),
+        autoVocabularySpeaking(playButton),
+    ])
 
-    else if (checkCells.length != 0)
-        autoCheckBox(checkCells);
-
-    else if (playButton.length != 0)
-        autoVocabularySpeaking(playButton);
-
-    else setTimeout(function () {
-        submitButton.click();
-    }, 1000) // min: 1000
-}, 30000); // min: 2000 // measurement: ms // set iteration time here
-
+    submitButton.click();
+    await timeout(1000);
+    begin();
+}
 
 // define function
-function autoTyping(answerBoxes) {
+async function autoTyping(answerBoxes) {
+    if (!answerBoxes.length) return;
     for (let i = 0; i < answerBoxes.length; i++) {
         answerBoxes[i].value = 'draft';
     }
+    await timeout(500);
     submitButton.click();
-    setTimeout(() => { viewAnswerButton.click(); }, 500)
-    
-    setTimeout(function () {
-        let answerArray = [];
-        answerBoxes = document.querySelectorAll('.dinline');
-        for (let correctAnswer of answerBoxes)
-            answerArray.push(correctAnswer.value);
+    await timeout(500);
+    viewAnswerButton.click();
 
-        console.log(answerArray);
-        viewAnswerButton.click();
+    await timeout(1000);
+    let answerArray = [];
+    answerBoxes = document.querySelectorAll('.dinline');
+    for (let correctAnswer of answerBoxes)
+        answerArray.push(correctAnswer.value);
 
-        for (let i = 0; i < answerBoxes.length; i++)
-            answerBoxes[i].value = answerArray[i];
-        setTimeout(() => {
-            submitButton.click();
-        }, 400);
-    }, 1000) // min: 1000
+    console.log(answerArray);
+    await timeout(500);
+    viewAnswerButton.click();
+
+    for (let i = 0; i < answerBoxes.length; i++)
+        answerBoxes[i].value = answerArray[i];
 }
 
-function autoCheckBox(checkCells) {
+async function autoCheckBox(checkCells) {
+    if (!checkCells.length) return;
     for (let i = 0; i < checkCells.length; i++) {
         checkCells[i].click();
     }
     submitButton.click();
-    setTimeout(() => { viewAnswerButton.click(); }, 500)
-    
+    await timeout(500);
+    viewAnswerButton.click();
+
     // refresh checkCells, remember correct answer to check
-    setTimeout(function () {
-        let answerArray = []
-        let checkCells = document.querySelectorAll('.ques > div > p > div > ins');
-        for (let i = 0; i < checkCells.length; i++)
-            if (checkCells[i].offsetParent.classList.contains('checked'))
-                answerArray.push(i);
-        console.log('correct answer:', answerArray);
-        viewAnswerButton.click();
-        for (let i of answerArray) {
-            checkCells[i].click();
-        }
-        setTimeout(() => {
-            submitButton.click();
-        }, 400);
-    }, 1000); // min: 1000
+    await timeout(1000);
+    let answerArray = []
+    checkCells = document.querySelectorAll('.ques > div > p > div > ins');
+    for (let i = 0; i < checkCells.length; i++)
+        if (checkCells[i].offsetParent.classList.contains('checked'))
+            answerArray.push(i);
+
+    console.log('correct answer:', answerArray);
+    await timeout(500);
+    viewAnswerButton.click();
+    for (let i of answerArray)
+        checkCells[i].click();
 }
 
-function autoVocabularySpeaking(playButton) {
+async function autoVocabularySpeaking(playButton) {
+    if (!playButton.length) return;
     for (let i = 0; i < playButton.length; i++) {
         playButton[i].click();
     }
-    setTimeout(() => {
-        submitButton.click();
-    }, 400);
 }
